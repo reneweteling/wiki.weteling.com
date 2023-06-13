@@ -2,11 +2,13 @@
 
 ```bash
 # add upstream
-git remote add dokku weteling.com:glitchtip
+git remote add dokku dokku@weteling.com:glitchtip
 
 
 # dokku
 dokku apps:create glitchtip
+dokku domains:add glitchtip glitchtip.weteling.com
+dokku letsencrypt:enable glitchtip
 dokku postgres:create glitchtip-postgres
 dokku postgres:link glitchtip-postgres glitchtip
 dokku redis:create glitchtip-redis
@@ -14,7 +16,7 @@ dokku redis:link glitchtip-redis glitchtip
 
 dokku ps:scale glitchtip worker=1
 dokku proxy:ports-set glitchtip http:80:8080 https:443:8080
-dokku config:set glitchtip GLITCHTIP_DOMAIN=https://glitchtip.dokku.me
+dokku config:set glitchtip GLITCHTIP_DOMAIN=https://glitchtip.weteling.com
 dokku config:set glitchtip SECRET_KEY=$(python3 -c "import secrets; print(''.join(secrets.choice([chr(i) for i in range(0x21, 0x7F)]) for i in range(60)));")
 dokku run glitchtip ./manage.py createsuperuser
 ```
